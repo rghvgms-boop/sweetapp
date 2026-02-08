@@ -1,5 +1,3 @@
-pip install streamlit face-recognition opencv-python firebase-admin numpy pillow
-
 import streamlit as st
 import face_recognition
 import numpy as np
