@@ -1,5 +1,4 @@
 import streamlit as st
-import face_recognition
 import numpy as np
 import cv2
 import firebase_admin
