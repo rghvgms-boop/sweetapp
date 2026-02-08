@@ -1,1 +1,6 @@
 streamlit
+face-recognition
+opencv-python
+firebase-admin
+numpy
+pillow
