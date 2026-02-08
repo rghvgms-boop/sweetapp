@@ -4,23 +4,25 @@ import numpy as np
 import firebase_admin
 from firebase_admin import credentials, db
 from PIL import Image
-import tempfile
 import base64
-import json
+import os
 
 # ---------------------------
-# 🔥 FIREBASE INIT (Secrets Based)
+# 🔥 FIREBASE INIT USING JSON FILE
 # ---------------------------
 
 if not firebase_admin._apps:
-    firebase_dict = dict(st.secrets["firebase"])
-    cred = credentials.Certificate(firebase_dict)
+
+    cred = credentials.Certificate(
+        "apicall-4ca93-firebase-adminsdk-fbsvc-eebe670471.json"
+    )
+
     firebase_admin.initialize_app(cred, {
         'databaseURL': "https://apicall-4ca93-default-rtdb.firebaseio.com"
     })
 
 # ---------------------------
-# 🎨 UI
+# 🎨 UI SETTINGS
 # ---------------------------
 
 st.set_page_config(page_title="Face Verification System", layout="centered")
@@ -51,7 +53,7 @@ def detect_face(image):
     return faces
 
 # ---------------------------
-# 📌 REGISTER
+# 📌 REGISTER FACE
 # ---------------------------
 
 if menu == "Register":
@@ -71,7 +73,6 @@ if menu == "Register":
         if len(faces) == 0:
             st.error("No face detected!")
         else:
-            # Convert image to base64
             _, buffer = cv2.imencode(".jpg", img_np)
             img_base64 = base64.b64encode(buffer).decode()
 
@@ -84,7 +85,7 @@ if menu == "Register":
             st.success(f"✅ {name} Registered Successfully!")
 
 # ---------------------------
-# 📌 VERIFY
+# 📌 VERIFY FACE
 # ---------------------------
 
 elif menu == "Verify":
@@ -112,17 +113,17 @@ elif menu == "Verify":
 
                 for key in data:
                     person = data[key]
-                    stored_img = base64.b64decode(person["image"])
-                    stored_np = np.frombuffer(stored_img, np.uint8)
+
+                    stored_img_bytes = base64.b64decode(person["image"])
+                    stored_np = np.frombuffer(stored_img_bytes, np.uint8)
                     stored_img = cv2.imdecode(stored_np, cv2.IMREAD_COLOR)
 
                     stored_faces = detect_face(stored_img)
 
                     if len(stored_faces) > 0:
                         matched = True
-                        st.success(f"✅ Face Detected (User: {person['name']})")
+                        st.success(f"✅ Face Matched (User: {person['name']})")
                         break
 
                 if not matched:
                     st.error("❌ Face Not Matched")
-                    
