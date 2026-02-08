@@ -15,7 +15,7 @@ import datetime
 # ---------------------------
 
 if not firebase_admin._apps:
-    cred = credentials.Certificate("serviceAccountKey.json")  # download from firebase
+    cred = credentials.Certificate("apicall-4ca93-firebase-adminsdk-fbsvc-eebe670471.json")  # download from firebase
     firebase_admin.initialize_app(cred, {
         'databaseURL': "https://apicall-4ca93-default-rtdb.firebaseio.com",
         'storageBucket': "apicall-4ca93.firebasestorage.app"
